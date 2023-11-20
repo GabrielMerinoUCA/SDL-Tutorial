@@ -6,31 +6,38 @@
 
 int main(int argc, char* argv[]) {
     
+    /* VARIABLES */
+
     //create window datatype
-    SDL_Window *window = nullptr; // pointer because windows are dynamic, need more than stack, and complex.
-    //btw, always initialize variables, even if as null values (obviously not literally null for all cases)
+    SDL_Window *window = nullptr;
+    // Create bool to know if game is running
+    bool isGameRunning = true;
+    // Event variable for event handling on main loop/sub loop
+    SDL_Event event;
+
+
+    /* SOURCE CODE */
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0){ // this can be optimized by just using SDL_Init, this example is good for debugging.
         std::cout<<"Not initialized!! \n"<<SDL_GetError()<< "\n";
-    }
-    else {
-        std::cout<<"SDL ready to go\n";
-    }
+    }else std::cout<<"SDL ready to go\n";
+    
 
-    window = SDL_CreateWindow("SDL Tutorial", 0, 0, 500, 500, SDL_WINDOW_SHOWN); // creates on heap and returns a pointer
+    window = SDL_CreateWindow("SDL Tutorial", 0, 0, 500, 500, SDL_WINDOW_SHOWN);
 
     if(window == NULL) {
-        std::cout<<"failed to create window"<<std::endl;
+        std::cout<<"failed to create window!"<<std::endl;
+        return -1;
     }
-    
-    // because the program runs fast, the window will be destroyed before we realize, so we delay the execution so
-    // we can see it actually works
-    SDL_Delay(10000);
+    while(isGameRunning) {
+        while(SDL_PollEvent(&event)) {
+            if(event.type == SDL_QUIT){
+                isGameRunning = false;
+            }
+        }
+    }
 
-
-    //release memory
     SDL_DestroyWindow(window);
-
-    SDL_Quit(); // shutdown all SDL subsystems
+    SDL_Quit();
     return 0;
 }
