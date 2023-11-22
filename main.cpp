@@ -31,8 +31,22 @@ int main(int argc, char* argv[]) {
     }
     while(isGameRunning) {
         while(SDL_PollEvent(&event)) {
-            if(event.type == SDL_QUIT){
-                isGameRunning = false;
+            switch(event.type) {
+                case SDL_QUIT:
+                    isGameRunning = false;
+                    break;
+                case SDL_MOUSEMOTION:
+                    std::cout<<"Mouse position: "<<event.motion.x<<" "<<event.motion.y<<std::endl;
+                    break;
+                case SDL_KEYDOWN:
+                    std::cout<<"key has been pressed: ";
+                    if(event.key.keysym.scancode == SDL_SCANCODE_A) {
+                        std::cout<<"Key A"<<std::endl;
+                    }
+                    break; 
+                default:
+                    std::cout<<"Unhandled event... What?"<<std::endl;
+                    break;
             }
         }
     }
