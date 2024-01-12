@@ -1,13 +1,16 @@
 // C++ standard
 #include <iostream>
-#include <typeinfo>
 // third party libs
 #include <SDL2/SDL.h>
 
 void setPixel(SDL_Surface *surface, Uint16 mouseX, Uint16 mouseY, Uint8 r, Uint8 g, Uint8 b) {
     SDL_LockSurface(surface);
-    Uint8 *pixelArray = (Uint8)surface->pixels;
-
+    // cast so we can edit the data
+    Uint8 *pixelArray = (Uint8*)surface->pixels;
+    // to hard to explain on a comment
+    pixelArray[surface->format->BytesPerPixel * mouseX + mouseY * surface->pitch] = b;
+    pixelArray[surface->format->BytesPerPixel * mouseX + mouseY * surface->pitch + 1] = g;
+    pixelArray[surface->format->BytesPerPixel * mouseX + mouseY * surface->pitch + 2] = r;
     SDL_UnlockSurface(surface);
 }
 
@@ -72,6 +75,8 @@ int main(int argc, char* argv[]) {
                 case SDL_MOUSEBUTTONDOWN:
                     if(event.button.button == SDL_BUTTON_LEFT) {
                         std::cout<<mouseX<<", "<<mouseY<<std::endl;
+                        setPixel(screen, mouseX, mouseY, 59, 151, 129);
+                        SDL_UpdateWindowSurface(window);
                     }
                     break;
                 default:
@@ -89,10 +94,9 @@ int main(int argc, char* argv[]) {
                 /* pixels is a void pointer, here it acts like an array. memset will fill a specific amount of 
                 times(3rd arg) certain value (2nd arg) such array (1st arg). 255 is white(only black to white)
                  'h' is height, and pitch is width but accessed in a faster way (considers memory alignment and padding) */
-                SDL_memset(screen->pixels, 255, screen->h * screen->pitch); // pitch is width, but faster.
+                SDL_memset(screen->pixels, 0, screen->h * screen->pitch); // pitch is width, but faster. and considers rgb
                 // unlock or else you won't be able to lock it or change it again
                 SDL_UnlockSurface(screen);
-                
             } // idk but maybe we need to take this out of the poll event loop
         }
         // This is kinda like double buffering since we first make all the changes before drawing.
