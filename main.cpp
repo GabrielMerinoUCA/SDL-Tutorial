@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
 
     // This allows you to manipulate graphics on an efficient manner. NOT COMPATIBLE WITH SURFACES
     SDL_Renderer *renderer = NULL;
+    SDL_Rect rectangle;
 
     /* SOURCE CODE */
 
@@ -34,6 +35,10 @@ int main(int argc, char* argv[]) {
     }
     int x=0,y=0;
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    rectangle.h = 50;
+    rectangle.w = 100;
+    rectangle.x = 200;
+    rectangle.y = 200;
     //1: window 
     while(isGameRunning) {
         //1: Get input
@@ -64,7 +69,7 @@ int main(int argc, char* argv[]) {
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderDrawLine(renderer, 5+x,5,100+x,120);
-
+        SDL_RenderDrawRect(renderer, &rectangle);
         SDL_RenderPresent(renderer);
     }
     SDL_DestroyWindow(window);
