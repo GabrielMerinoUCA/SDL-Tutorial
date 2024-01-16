@@ -20,6 +20,8 @@ int main(int argc, char* argv[]) {
     // This allows you to manipulate graphics on an efficient manner. NOT COMPATIBLE WITH SURFACES
     SDL_Renderer *renderer = NULL;
     SDL_Rect rectangle;
+    SDL_Surface *surface = SDL_LoadBMP("./image.bmp");
+    SDL_Texture *texture = NULL;
 
     /* SOURCE CODE */
 
@@ -27,7 +29,7 @@ int main(int argc, char* argv[]) {
         std::cout<<"Not initialized!! \n"<<SDL_GetError()<< "\n";
     }else std::cout<<"SDL ready to go\n";
     
-    window = SDL_CreateWindow("SDL Tutorial", 0, 0, 640, 480, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("SDL Tutorial", 0, 0, 1080, 720, SDL_WINDOW_SHOWN);
 
     if(window == NULL) {
         std::cout<<"failed to create window!"<<std::endl;
@@ -35,8 +37,13 @@ int main(int argc, char* argv[]) {
     }
     int x=0,y=0;
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    rectangle.h = 50;
-    rectangle.w = 100;
+    // You create
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    // create rectangle
+    rectangle.w = 761;
+    rectangle.h = 406;
     rectangle.x = 200;
     rectangle.y = 200;
     //1: window 
@@ -62,16 +69,21 @@ int main(int argc, char* argv[]) {
         //3: Clear and render.
         // Stablish how you want the screen to look on refresh, realistically, you'll use a different
         // variable called background or something (I assume).
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
         // Restart the whole screen according to the current renderer, here it's color but I assume
         // it could also be images.
         SDL_RenderClear(renderer);
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderDrawLine(renderer, 5+x,5,100+x,120);
-        SDL_RenderDrawRect(renderer, &rectangle);
+        //SDL_RenderDrawRect(renderer, &rectangle);
+        // Instead of drawing a rectangle, we create a texture and use rectangle
+        // to define it's outline/size
+        SDL_RenderCopy(renderer, texture, NULL, &rectangle);
         SDL_RenderPresent(renderer);
     }
+    // always a good practice to destroy pointers to leave ram clear of garbage values
+    SDL_DestroyTexture(texture);
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
