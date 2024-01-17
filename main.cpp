@@ -20,7 +20,8 @@ int main(int argc, char* argv[]) {
     // This allows you to manipulate graphics on an efficient manner. NOT COMPATIBLE WITH SURFACES
     SDL_Renderer *renderer = NULL;
     SDL_Rect rectangle;
-    SDL_Surface *surface = SDL_LoadBMP("./image.bmp");
+    SDL_Surface *surface = SDL_LoadBMP("./stickboy.bmp");
+    SDL_SetColorKey(surface, 1, SDL_MapRGB(surface->format, 255, 0, 240));
     SDL_Texture *texture = NULL;
 
     /* SOURCE CODE */
@@ -37,13 +38,13 @@ int main(int argc, char* argv[]) {
     }
     int x=0,y=0;
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    // You create
+    // You create a texture using pixel info from surface with renderer as the "engine"
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
 
     // create rectangle
-    rectangle.w = 761;
-    rectangle.h = 406;
+    rectangle.w = 100;
+    rectangle.h = 100;
     rectangle.x = 200;
     rectangle.y = 200;
     //1: window 
@@ -69,7 +70,7 @@ int main(int argc, char* argv[]) {
         //3: Clear and render.
         // Stablish how you want the screen to look on refresh, realistically, you'll use a different
         // variable called background or something (I assume).
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); 
         // Restart the whole screen according to the current renderer, here it's color but I assume
         // it could also be images.
         SDL_RenderClear(renderer);
