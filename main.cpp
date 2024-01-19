@@ -19,9 +19,8 @@ int main(int argc, char* argv[]) {
 
     // This allows you to manipulate graphics on an efficient manner. NOT COMPATIBLE WITH SURFACES
     SDL_Renderer *renderer = NULL;
-    SDL_Rect rectangle;
+    SDL_Rect rectangle, rectangle2 = {0,0,100,100};
     SDL_Surface *surface = SDL_LoadBMP("./stickboy.bmp");
-    SDL_SetColorKey(surface, 1, SDL_MapRGB(surface->format, 255, 0, 240));
     SDL_Texture *texture = NULL;
 
     /* SOURCE CODE */
@@ -41,6 +40,7 @@ int main(int argc, char* argv[]) {
     // You create a texture using pixel info from surface with renderer as the "engine"
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_ADD);
 
     // create rectangle
     rectangle.w = 100;
@@ -55,7 +55,11 @@ int main(int argc, char* argv[]) {
             switch(event.type) {
                 case SDL_QUIT:
                     isGameRunning = false;
-                    break;                
+                    break;         
+                case SDL_MOUSEMOTION:
+                    rectangle2.x = event.motion.x - rectangle.w/2;
+                    rectangle2.y = event.motion.y - rectangle.h/2;
+                    break;
                 default:
                     break;
             }
@@ -81,6 +85,7 @@ int main(int argc, char* argv[]) {
         // Instead of drawing a rectangle, we create a texture and use rectangle
         // to define it's outline/size
         SDL_RenderCopy(renderer, texture, NULL, &rectangle);
+        SDL_RenderCopy(renderer, texture, NULL, &rectangle2);
         SDL_RenderPresent(renderer);
     }
     // always a good practice to destroy pointers to leave ram clear of garbage values
