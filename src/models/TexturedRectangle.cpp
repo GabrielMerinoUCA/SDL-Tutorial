@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include "../headers/TexturedRectangle.hpp"
+#include "TexturedRectangle.hpp"
 
 TexturedRectangle::TexturedRectangle(const char *filepath, SDL_Renderer *renderer, SDL_Rect rect) {
     SDL_Surface *surface = SDL_LoadBMP(("../%s", filepath));

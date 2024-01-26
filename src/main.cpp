@@ -1,5 +1,5 @@
 // local headers
-#include "./headers/TexturedRectangle.hpp"
+#include "TexturedRectangle.hpp"
 // C++ standard
 #include <iostream>
 // third party libs
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    TexturedRectangle rect("image.bmp", renderer, {0,0,640,330});
+    TexturedRectangle rect("assets/images/image.bmp", renderer, {0,0,640,330});
 
     //1: window 
     while(isGameRunning) {
