@@ -1,22 +1,12 @@
 #include <SDL2/SDL.h>
 #include "TexturedRectangle.hpp"
+#include "ResourceManager.hpp"
+#include "global.hpp"
 
-TexturedRectangle::TexturedRectangle(const char *filepath, SDL_Renderer *renderer, SDL_Rect rect) {
-    SDL_Surface *surface = SDL_LoadBMP(("../%s", filepath));
-    this->renderer = renderer;
-    this->texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+TexturedRectangle::TexturedRectangle(const char* filepath, const SDL_Rect &rect) {
+    this->texture = ResourceManager::getResourceManager()->getTexture(filepath);
     this->rect = rect;
-    SDL_FreeSurface(surface);
-}
-TexturedRectangle::TexturedRectangle(const char *filepath, SDL_Renderer *renderer) {
-    SDL_Surface *surface = SDL_LoadBMP(("../%s", filepath));
-    this->renderer = renderer;
-    this->texture = SDL_CreateTextureFromSurface(this->renderer, surface);
-    SDL_FreeSurface(surface);
-}
-TexturedRectangle::~TexturedRectangle() {
-    SDL_DestroyTexture(this->texture);
 }
 void TexturedRectangle::render() {
-    SDL_RenderCopy(this->renderer, this->texture, NULL, &this->rect);
+    SDL_RenderCopy(mainRenderer, this->texture, NULL, &this->rect);
 }
