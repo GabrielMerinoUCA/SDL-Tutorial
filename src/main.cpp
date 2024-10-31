@@ -2,6 +2,7 @@
 #include "TexturedRectangle.hpp"
 #include "ResourceManager.hpp"
 #include "global.hpp"
+#include "AnimatedSprite.hpp"
 // C++ standard
 #include <iostream>
 // third party libs
@@ -17,7 +18,8 @@ int main(int argc, char* argv[]) {
     bool isGameRunning = true;
     // Event variable for event handling on main loop/sub loop
     SDL_Event event;
-    
+
+    int frameNumber = 0;
     /* if the image uses repeated colors, .gif is the better option. is lighter but a lil bit 
     slower and appears to have faulty compression but barely visible */
     
@@ -28,26 +30,16 @@ int main(int argc, char* argv[]) {
     }else LOG("SDL ready to go");
 
     window = SDL_CreateWindow("SDL Tutorial", 0, 0, 640, 480, SDL_WINDOW_SHOWN);
-
     if(window == NULL) {
         LOG("failed to create window!");
         return -1;
     }
 
+    // don't put any code that isn't declaration before this unless you know it doesn't use the renderer
     mainRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    TexturedRectangle rect1 = TexturedRectangle(
-        "assets/images/image.bmp",
-        {0,0,640,330}
-    );
-    TexturedRectangle rect2 = TexturedRectangle(
-        "assets/images/image.bmp",
-        {0,100,640,330}
-    );
-    TexturedRectangle rect3 = TexturedRectangle(
-        "assets/images/image.bmp",
-        {0,200,640,330}
-    );
+    AnimatedSprite marioSprite("assets/images/MarioSpriteSheet.bmp");
+    marioSprite.draw({100, 100, 32*4, 34*4});// this rect defines the size of the image on screen.
 
     //1: window 
     while(isGameRunning) {
@@ -67,10 +59,15 @@ int main(int argc, char* argv[]) {
         // it could also be images.
         SDL_RenderClear(mainRenderer);
 
+        marioSprite.playFrame({16, 0, 16, 17}, frameNumber);// this is the size of the inner frame, the iterator.
+        marioSprite.render();
+        frameNumber++;
+        if(frameNumber>=3){
+            frameNumber=0;
+        }
+        SDL_Delay(100);
+
         SDL_SetRenderDrawColor(mainRenderer, 255, 255, 255, 255);
-        rect1.render();
-        rect2.render();
-        rect3.render();
 
         SDL_RenderPresent(mainRenderer);
     }
