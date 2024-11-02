@@ -10,3 +10,7 @@ TexturedRectangle::TexturedRectangle(const char* filepath, const SDL_Rect &rect)
 void TexturedRectangle::render() {
     SDL_RenderCopy(mainRenderer, this->texture, NULL, &this->rect);
 }
+
+bool TexturedRectangle::isColliding(const TexturedRectangle &obj) {
+    return SDL_HasIntersection(&(this->rect), &obj.rect);
+}
