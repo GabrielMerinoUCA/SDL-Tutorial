@@ -31,7 +31,6 @@ void render() {
 
     rect1->render();
     rect2->render();
-    
 }
 
 void handleEvent(SDL_Event &event) {
