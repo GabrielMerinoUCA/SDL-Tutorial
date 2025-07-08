@@ -11,7 +11,7 @@ class SDLApp{
     std::function<void(SDL_Event&)> eventCallback;
     std::function<void(void)> renderCallback;
     int mouseX, mouseY;
-
+    SDLApp();
 
     // methods
     public:

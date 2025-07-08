@@ -45,7 +45,8 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "ios": "cpp"
     },
     "cSpell.words": [
         "BLENDMODE",

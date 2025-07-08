@@ -1,11 +1,11 @@
 // local headers
-#include "TexturedRectangle.hpp"
 #include "global.hpp"
 #include "SDLApp.hpp"
+#include "GameEntity.hpp"
 // third party libs
 #include <SDL2/SDL.h>
 
-TexturedRectangle *rect1, *rect2;
+GameEntity *rect1, *rect2;
 SDLApp *myApp;
 
 void handleEvent(SDL_Event &event);
@@ -16,18 +16,21 @@ int main(int argc, char* argv[]) {
     myApp = new SDLApp("SDL Tutorial", {0, 0, 640, 480});
     myApp->setEventCallback(handleEvent);
     myApp->setRenderCallback(render);
-    rect1 = new TexturedRectangle("assets/images/stickboy.bmp", {150,150,100,100});
-    rect2 = new TexturedRectangle("assets/images/stickboy.bmp", {0,100,100,100});
+    rect1 = new GameEntity("assets/images/stickboy.bmp", {150,150,100,100});
+    rect2 = new GameEntity("assets/images/stickboy.bmp", {0,100,100,100});
 
-    myApp->runLoop();    
+    myApp->runLoop();
+    delete rect1;
+    delete rect2;
     delete myApp;
 }
 
 
 void render() {
-    
-    rect2->rect.x = myApp->getMouseX();
-    rect2->rect.y = myApp->getMouseY();
+    SDL_Rect &rect = rect2->getTexturedRectangle().rect;
+
+    rect.x = myApp->getMouseX();
+    rect.y = myApp->getMouseY();
 
     rect1->render();
     rect2->render();
@@ -41,7 +44,7 @@ void handleEvent(SDL_Event &event) {
         if(event.button.button == SDL_BUTTON_LEFT) {
             // the most ideal way to do this will be to just use the function
             // But with OOP, it will be for the function to accept SDL_Rect since it's less data.
-            if(rect2->isColliding(*rect1)){
+            if(rect2->getTexturedRectangle().isColliding(rect1->getTexturedRectangle())){
                 LOG("Collided!");
             }
         }

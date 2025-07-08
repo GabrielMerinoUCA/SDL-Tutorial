@@ -14,3 +14,13 @@ void TexturedRectangle::render() {
 bool TexturedRectangle::isColliding(const TexturedRectangle &obj) {
     return SDL_HasIntersection(&(this->rect), &obj.rect);
 }
+
+void TexturedRectangle::setPosition(const int &x, const int &y) {
+    this->rect.x = x;
+    this->rect.y = y;
+}
+
+void TexturedRectangle::setDimension(const int &w, const int &h) {
+    this->rect.w = w;
+    this->rect.h = h;
+}
