@@ -27,10 +27,9 @@ int main(int argc, char* argv[]) {
 
 
 void render() {
-    SDL_Rect &rect = rect2->getTexturedRectangle().rect;
-
-    rect.x = myApp->getMouseX();
-    rect.y = myApp->getMouseY();
+    TexturedRectangle &rect = rect2->getTexturedRectangle(); // a lil dangerous but whatever. (reassignment possible)
+    // doing it this way makes it more readable documentation wise.
+    rect.setPosition(myApp->getMouseX(), myApp->getMouseY());
 
     rect1->render();
     rect2->render();
