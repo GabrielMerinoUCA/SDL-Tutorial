@@ -1,5 +1,4 @@
 #include "GameEntity.hpp"
-#include <SDL2/SDL.h>
 
 GameEntity::GameEntity() {
     sprite = NULL;

@@ -9,18 +9,25 @@ class SDLApp{
     SDL_Event event;
     bool isGameRunning;
     std::function<void(SDL_Event&)> eventCallback;
-    std::function<void(void)> renderCallback;
+    std::function<void()> renderCallback;
     int mouseX, mouseY;
+    Uint32 deltaTime;
+    Uint32 frameRate_MS;
     SDLApp();
 
     // methods
     public:
     // be advised that default constructor exists with no params, it could lead to bad init if called.
-    SDLApp(const char* title, const SDL_Rect &windowSize);
+    SDLApp(const char* title, const SDL_Rect &windowSize, const float &frameCap);
     ~SDLApp();
 
     void setEventCallback(std::function<void(SDL_Event&)> eventCallback);
-    void setRenderCallback(std::function<void(void)> renderCallback);
+    void setRenderCallback(std::function<void()> renderCallback);
+    /**
+     * set the frame rate in milliseconds
+     * @param frameCap is the target frame rate cap in FPS i.e 60 FPS 
+     */
+    void setFrameRate_MS(const float &frameCap);
     void runLoop();
     void stopAppLoop();
     int getMouseX() const;

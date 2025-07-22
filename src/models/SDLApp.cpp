@@ -3,10 +3,13 @@
 #include <SDL2/SDL.h>
 #include <functional>
 
-SDLApp::SDLApp(const char* title, const SDL_Rect &windowSize) {
+SDLApp::SDLApp(const char* title, const SDL_Rect &windowSize, const float & frameCap) {
+    // Attributes 
     this->isGameRunning = true;
     this->mouseX = 0;
     this->mouseY = 0;
+    this->deltaTime = 0;
+    this->setFrameRate_MS(frameCap);
 
     // initialize video related sdl functions
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -40,19 +43,30 @@ void SDLApp::setEventCallback(std::function<void(SDL_Event&)> eventCallback) {
     this->eventCallback = eventCallback;
 }
 
-void SDLApp::setRenderCallback(std::function<void(void)> renderCallback) {
+void SDLApp::setRenderCallback(std::function<void()> renderCallback) {
     this->renderCallback = renderCallback;
 }
 
-void SDLApp::runLoop() {
-    while(isGameRunning) {
 
+void SDLApp::setFrameRate_MS(const float &frameCap) {
+    // where 1000 converts our framecap to milliseconds.
+    this->frameRate_MS = (1.0f/frameCap) * 1000.0f;
+}
+
+void SDLApp::runLoop() {
+    Uint32 previousTime = 0;
+    while(isGameRunning) {
+        // previous time will take current time but by the time it is used, it would have become
+        // previous time.
+        previousTime = SDL_GetTicks();
+
+        // in the future, it might be a good idea to use different threads for events and render
         eventCallback(this->event);
 
         SDL_GetMouseState(&(this->mouseX), &(this->mouseY));
 
         // by adding this here, we don't have to worry about it on our custom render functions.
-        //3: Clear and render.
+        // 3: Clear and render.
         // Stablish how you want the screen to look on refresh, realistically, you'll use a different
         // variable called background or something (I assume).
         SDL_SetRenderDrawColor(mainRenderer, 0, 0, 0, 255); 
@@ -62,7 +76,16 @@ void SDLApp::runLoop() {
 
         renderCallback();
         SDL_RenderPresent(mainRenderer);
-
+        deltaTime = SDL_GetTicks() - previousTime;
+        if(deltaTime < frameRate_MS) {
+            /* 
+                Delay essentially limits the game to a specific max framerate or at least tries to like in 
+                minecraft. so if the delay is each 16.66... ms or 60 FPS, the loop wil take as long as it has
+                to, and then wait 16ms to continue. In this case, we make it always be 16ms. If the logic took
+                4ms, and the expected time is 16ms, then we have to delay 16-4ms.
+            */
+            SDL_Delay(frameRate_MS - deltaTime);
+        }
     }
 }
 

@@ -5,34 +5,85 @@
 // third party libs
 #include <SDL2/SDL.h>
 
-GameEntity *rect1, *rect2;
-SDLApp *myApp;
+// for the temporal thingy
+static int speed = 10;
+
+static const float FRAME_CAP = 60.0f;
+static GameEntity *obj1, *obj2;
+static SDLApp *myApp;
 
 void handleEvent(SDL_Event &event);
 void render();
 
 int main(int argc, char* argv[]) {
     /* VARIABLES */
-    myApp = new SDLApp("SDL Tutorial", {0, 0, 640, 480});
+    myApp = new SDLApp("SDL Tutorial", {x: 0, y: 0, WINDOW_WIDTH, WINDOW_HEIGHT}, FRAME_CAP);
     myApp->setEventCallback(handleEvent);
     myApp->setRenderCallback(render);
-    rect1 = new GameEntity("assets/images/stickboy.bmp", {150,150,100,100});
-    rect2 = new GameEntity("assets/images/stickboy.bmp", {0,100,100,100});
+    obj1 = new GameEntity(
+        "assets/images/stickboy.bmp", 
+        {
+            x: 150,
+            y: 150,
+            w: 100,
+            h: 100
+        }
+    );
+    obj2 = new GameEntity(
+        "assets/images/stickboy.bmp",
+        {
+            x: 0, 
+            y: 100,
+            w: 100,
+            h: 100
+        }
+    );
 
     myApp->runLoop();
-    delete rect1;
-    delete rect2;
+    delete obj1;
+    delete obj2;
     delete myApp;
 }
 
 
 void render() {
-    TexturedRectangle &rect = rect2->getTexturedRectangle(); // a lil dangerous but whatever. (reassignment possible)
+    TexturedRectangle &rect1 = obj2->getTexturedRectangle(); // a lil dangerous but whatever. (reassignment possible)
+    TexturedRectangle &rect2 = obj1->getTexturedRectangle();
     // doing it this way makes it more readable documentation wise.
-    rect.setPosition(myApp->getMouseX(), myApp->getMouseY());
+    rect1.setPosition(myApp->getMouseX(), myApp->getMouseY());
 
-    rect1->render();
-    rect2->render();
+    // FOR DEMONSTRATION PURPOSES ONLY, NOT TO BE USED IN ANY REAL LIFE SCENARIO
+    static int x = 0, y = 0;
+    static bool up = true, right = true;
+
+    if(y == 0) {
+        up = false;
+    }
+    else if(y == WINDOW_HEIGHT - 1) {
+        up = true;
+    }
+    if(x == 0) {
+        right = true;
+    }
+    else if(x == WINDOW_WIDTH - 1) {
+        right = false;
+    }
+    
+    if(up) {
+        y--;
+    }else{
+        y++;
+    }
+    if(right) {
+        x++;
+    }else{
+        x--;
+    }
+
+    rect2.setPosition(x,y);
+    
+    obj1->render();
+    obj2->render();
 }
 
 void handleEvent(SDL_Event &event) {
@@ -43,7 +94,7 @@ void handleEvent(SDL_Event &event) {
         if(event.button.button == SDL_BUTTON_LEFT) {
             // the most ideal way to do this will be to just use the function
             // But with OOP, it will be for the function to accept SDL_Rect since it's less data.
-            if(rect2->getTexturedRectangle().isColliding(rect1->getTexturedRectangle())){
+            if(obj2->getTexturedRectangle().isColliding(obj1->getTexturedRectangle())){
                 LOG("Collided!");
             }
         }
