@@ -1,25 +1,18 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include "Vector2.hpp"
 
-class TexturedRectangle
-{
+class TexturedRectangle {
     // Attributes
 public:
-    SDL_Rect rect;
+    Vector2 dimensions;
     SDL_Texture *texture;
-    bool collision;
     // Methods
 public:
-    /**
-     * Full constructor
-     * @param filepath uses a "dir/file" format, not a "./dir/file" format
-     * @param rect pass it on the arguments like this {0,0,0,0} where args are equivalent to: (x,y,w,h) 
-     */
-    TexturedRectangle(const char* filepath, const SDL_Rect &rect);
-    // Detect collision
-    bool isColliding(const TexturedRectangle &obj);
-    void setPosition(const int &x, const int &y);
-    void setDimension(const int &w, const int &h);
-    void update();
-    void render();
+    
+    TexturedRectangle(const char *filepath, const Vector2 &dimensions);
+    void setDimension(const Vector2 &dimensions);
+    // A better way of doing this might be to make a pointer to 
+    // the Game entity's position variable.
+    void render(const Vector2 &texturePosition);
 };

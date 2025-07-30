@@ -10,6 +10,8 @@ class SDLApp{
     bool isGameRunning;
     std::function<void(SDL_Event&)> eventCallback;
     std::function<void()> renderCallback;
+    std::function<void()> updateCallback;
+    // Should be a vector2
     int mouseX, mouseY;
     Uint32 deltaTime;
     Uint32 frameRate_MS;
@@ -23,6 +25,7 @@ class SDLApp{
 
     void setEventCallback(std::function<void(SDL_Event&)> eventCallback);
     void setRenderCallback(std::function<void()> renderCallback);
+    void setUpdateCallback(std::function<void()> updateCallback);
     /**
      * set the frame rate in milliseconds
      * @param frameCap is the target frame rate cap in FPS i.e 60 FPS 

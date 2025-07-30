@@ -1,7 +1,6 @@
 #include "SDLApp.hpp"
 #include "global.hpp"
 #include <SDL2/SDL.h>
-#include <functional>
 
 SDLApp::SDLApp(const char* title, const SDL_Rect &windowSize, const float & frameCap) {
     // Attributes 
@@ -16,7 +15,7 @@ SDLApp::SDLApp(const char* title, const SDL_Rect &windowSize, const float & fram
         LOG("Not initialized!");
     } else {LOG("SDL ready to go");}
 
-    // window creation
+    // window creation, should probably change SDL_WINDOW_SHOWN to other like resizable
     this->window = SDL_CreateWindow(
         title, 
         windowSize.x, 
@@ -47,6 +46,9 @@ void SDLApp::setRenderCallback(std::function<void()> renderCallback) {
     this->renderCallback = renderCallback;
 }
 
+void SDLApp::setUpdateCallback(std::function<void()> updateCallback) {
+    this->updateCallback = updateCallback;
+}
 
 void SDLApp::setFrameRate_MS(const float &frameCap) {
     // where 1000 converts our framecap to milliseconds.
@@ -64,6 +66,8 @@ void SDLApp::runLoop() {
         eventCallback(this->event);
 
         SDL_GetMouseState(&(this->mouseX), &(this->mouseY));
+
+        updateCallback();
 
         // by adding this here, we don't have to worry about it on our custom render functions.
         // 3: Clear and render.

@@ -5,21 +5,20 @@
 // third party libs
 #include <SDL2/SDL.h>
 
-// for the temporal thingy
-static int speed = 10;
-
 static const float FRAME_CAP = 60.0f;
 static GameEntity *obj1, *obj2;
 static SDLApp *myApp;
 
 void handleEvent(SDL_Event &event);
 void render();
+void update();
 
 int main(int argc, char* argv[]) {
     /* VARIABLES */
     myApp = new SDLApp("SDL Tutorial", {x: 0, y: 0, WINDOW_WIDTH, WINDOW_HEIGHT}, FRAME_CAP);
     myApp->setEventCallback(handleEvent);
     myApp->setRenderCallback(render);
+    myApp->setUpdateCallback(update);
     obj1 = new GameEntity(
         "assets/images/stickboy.bmp", 
         {
@@ -45,14 +44,9 @@ int main(int argc, char* argv[]) {
     delete myApp;
 }
 
-
-void render() {
-    TexturedRectangle &rect1 = obj2->getTexturedRectangle(); // a lil dangerous but whatever. (reassignment possible)
-    TexturedRectangle &rect2 = obj1->getTexturedRectangle();
-    // doing it this way makes it more readable documentation wise.
-    rect1.setPosition(myApp->getMouseX(), myApp->getMouseY());
-
-    // FOR DEMONSTRATION PURPOSES ONLY, NOT TO BE USED IN ANY REAL LIFE SCENARIO
+// handles movement of objects or their updatas in general terms
+void update() {
+    obj2->setPosition({myApp->getMouseX(), myApp->getMouseY()});
     static int x = 0, y = 0;
     static bool up = true, right = true;
 
@@ -80,10 +74,17 @@ void render() {
         x--;
     }
 
-    rect2.setPosition(x,y);
-    
+    obj1->setPosition({x, y});
+
+    obj1->update();
+    obj2->update();
+}
+
+// the render callback tells the app which objects we want to render
+void render() {
     obj1->render();
     obj2->render();
+    obj2->getCollider2D().drawHitbox();
 }
 
 void handleEvent(SDL_Event &event) {
@@ -94,7 +95,7 @@ void handleEvent(SDL_Event &event) {
         if(event.button.button == SDL_BUTTON_LEFT) {
             // the most ideal way to do this will be to just use the function
             // But with OOP, it will be for the function to accept SDL_Rect since it's less data.
-            if(obj2->getTexturedRectangle().isColliding(obj1->getTexturedRectangle())){
+            if(obj2->getCollider2D().isColliding(obj1->getCollider2D())){
                 LOG("Collided!");
             }
         }

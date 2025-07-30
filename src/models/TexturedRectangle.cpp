@@ -3,24 +3,20 @@
 #include "ResourceManager.hpp"
 #include "global.hpp"
 
-TexturedRectangle::TexturedRectangle(const char* filepath, const SDL_Rect &rect) {
+TexturedRectangle::TexturedRectangle(const char* filepath, const Vector2 &dimensions) {
     this->texture = ResourceManager::getResourceManager()->getTexture(filepath);
-    this->rect = rect;
+    this->dimensions = dimensions;
 }
-void TexturedRectangle::render() {
-    SDL_RenderCopy(mainRenderer, this->texture, NULL, &this->rect);
-}
-
-bool TexturedRectangle::isColliding(const TexturedRectangle &obj) {
-    return SDL_HasIntersection(&(this->rect), &obj.rect);
-}
-
-void TexturedRectangle::setPosition(const int &x, const int &y) {
-    this->rect.x = x;
-    this->rect.y = y;
+void TexturedRectangle::render(const Vector2 &texturePosition) {
+    SDL_Rect rect = {
+        x: texturePosition.x,
+        y: texturePosition.y,
+        w: dimensions.x,
+        h: dimensions.y
+    };
+    SDL_RenderCopy(mainRenderer, this->texture, NULL, &rect);
 }
 
-void TexturedRectangle::setDimension(const int &w, const int &h) {
-    this->rect.w = w;
-    this->rect.h = h;
+void TexturedRectangle::setDimension(const Vector2 &dimensions) {
+    this->dimensions = dimensions;
 }
