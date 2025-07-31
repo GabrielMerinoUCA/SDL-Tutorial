@@ -1,22 +1,30 @@
-#include <SDL2/SDL.h>
 #include "TexturedRectangle.hpp"
-#include "ResourceManager.hpp"
-#include "global.hpp"
 
-TexturedRectangle::TexturedRectangle(const char* filepath, const Vector2 &dimensions) {
-    this->texture = ResourceManager::getResourceManager()->getTexture(filepath);
-    this->dimensions = dimensions;
-}
-void TexturedRectangle::render(const Vector2 &texturePosition) {
-    SDL_Rect rect = {
-        x: texturePosition.x,
-        y: texturePosition.y,
+TexturedRectangle::TexturedRectangle(
+        const char *filepath, 
+        const Vector2 &dimensions 
+    ) :
+    texture(ResourceManager::getResourceManager()->getTexture(filepath)),
+    Transform2D(dimensions)
+{ }
+
+void TexturedRectangle::render() {
+    SDL_Rect rect;
+    if(this->isRelativePositionSet()) {
+        rect = {
+            x: relativePosition->x + positionOffset.x,
+            y: relativePosition->y + positionOffset.y,
+            w: dimensions.x,
+            h: dimensions.y
+        };
+        SDL_RenderCopy(mainRenderer, this->texture, NULL, &rect);
+        return;
+    }
+    rect = {
+        x: absolutePosition.x,
+        y: absolutePosition.y,
         w: dimensions.x,
         h: dimensions.y
     };
     SDL_RenderCopy(mainRenderer, this->texture, NULL, &rect);
-}
-
-void TexturedRectangle::setDimension(const Vector2 &dimensions) {
-    this->dimensions = dimensions;
 }

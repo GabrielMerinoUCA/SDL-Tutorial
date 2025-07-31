@@ -4,10 +4,10 @@
 
 class ResourceManager {
 //Attributes
-public: 
 private:
     static ResourceManager *resourceManager;
     std::unordered_map<const char*, SDL_Texture*> textures;
+    
 // Methods
 private:
     ResourceManager();

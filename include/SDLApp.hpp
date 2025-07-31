@@ -3,8 +3,8 @@
 #include <functional>
 
 class SDLApp{
-    // attributes
-    private:
+// attributes
+private:
     SDL_Window *window;
     SDL_Event event;
     bool isGameRunning;
@@ -17,8 +17,8 @@ class SDLApp{
     Uint32 frameRate_MS;
     SDLApp();
 
-    // methods
-    public:
+// Methods
+public:
     // be advised that default constructor exists with no params, it could lead to bad init if called.
     SDLApp(const char* title, const SDL_Rect &windowSize, const float &frameCap);
     ~SDLApp();

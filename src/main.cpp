@@ -19,24 +19,10 @@ int main(int argc, char* argv[]) {
     myApp->setEventCallback(handleEvent);
     myApp->setRenderCallback(render);
     myApp->setUpdateCallback(update);
-    obj1 = new GameEntity(
-        "assets/images/stickboy.bmp", 
-        {
-            x: 150,
-            y: 150,
-            w: 100,
-            h: 100
-        }
-    );
-    obj2 = new GameEntity(
-        "assets/images/stickboy.bmp",
-        {
-            x: 0, 
-            y: 100,
-            w: 100,
-            h: 100
-        }
-    );
+    obj1 = new GameEntity({x: 150, y: 150});
+    obj1->addTexturedRectangle("assets/images/stickboy.bmp", {x: 100, y: 100}, {0, 0});
+    obj2 = new GameEntity({x: 0, y: 100});
+    obj2->addTexturedRectangle("assets/images/stickboy.bmp", {x: 100, y: 100}, {0, 0});
 
     myApp->runLoop();
     delete obj1;
@@ -84,7 +70,7 @@ void update() {
 void render() {
     obj1->render();
     obj2->render();
-    obj2->getCollider2D().drawHitbox();
+    //obj2->getCollider2D().drawHitbox();
 }
 
 void handleEvent(SDL_Event &event) {

@@ -1,18 +1,27 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "Vector2.hpp"
+#include "ResourceManager.hpp"
+#include "global.hpp"
+#include "Transform2D.hpp"
 
-class TexturedRectangle {
-    // Attributes
+class TexturedRectangle : public Transform2D {
+// Attributes
 public:
-    Vector2 dimensions;
-    SDL_Texture *texture;
-    // Methods
-public:
+    // should be linked to the Game entity, used only if absolutePosition is 0
     
+private:
+    SDL_Texture *texture;
+
+// Methods
+public:
     TexturedRectangle(const char *filepath, const Vector2 &dimensions);
-    void setDimension(const Vector2 &dimensions);
-    // A better way of doing this might be to make a pointer to 
-    // the Game entity's position variable.
-    void render(const Vector2 &texturePosition);
+
+    /**
+     * Renders the sprite at the coordinate specified
+     * Either absolute or relative with offset
+     */
+    void render();
+
+private:
 };
