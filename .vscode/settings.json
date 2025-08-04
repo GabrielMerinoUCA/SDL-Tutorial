@@ -46,7 +46,8 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "typeindex": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "optional": "cpp"
     },
     "cSpell.words": [
         "BLENDMODE",

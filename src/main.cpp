@@ -14,15 +14,19 @@ void render();
 void update();
 
 int main(int argc, char* argv[]) {
-    /* VARIABLES */
     myApp = new SDLApp("SDL Tutorial", {x: 0, y: 0, WINDOW_WIDTH, WINDOW_HEIGHT}, FRAME_CAP);
     myApp->setEventCallback(handleEvent);
     myApp->setRenderCallback(render);
     myApp->setUpdateCallback(update);
-    obj1 = new GameEntity({x: 150, y: 150});
+
+    obj1 = new GameEntity({x: 150, y: 150}, 1, 2);
     obj1->addTexturedRectangle("assets/images/stickboy.bmp", {x: 100, y: 100}, {0, 0});
-    obj2 = new GameEntity({x: 0, y: 100});
+    obj1->addCollider2D({x: 100, y: 100}, {0, 0});
+    obj1->addCollider2D({x: 50, y: 50}, {25, 25});
+
+    obj2 = new GameEntity({x: 0, y: 100}, 1, 1);
     obj2->addTexturedRectangle("assets/images/stickboy.bmp", {x: 100, y: 100}, {0, 0});
+    obj2->addCollider2D({x: 100, y: 100}, {0, 0});
 
     myApp->runLoop();
     delete obj1;
@@ -70,7 +74,8 @@ void update() {
 void render() {
     obj1->render();
     obj2->render();
-    //obj2->getCollider2D().drawHitbox();
+    obj1->drawCollidersHitboxes();
+    obj2->drawCollidersHitboxes();
 }
 
 void handleEvent(SDL_Event &event) {
@@ -81,7 +86,7 @@ void handleEvent(SDL_Event &event) {
         if(event.button.button == SDL_BUTTON_LEFT) {
             // the most ideal way to do this will be to just use the function
             // But with OOP, it will be for the function to accept SDL_Rect since it's less data.
-            if(obj2->getCollider2D().isColliding(obj1->getCollider2D())){
+            if(obj2->getCollider2D(0).isColliding(obj1->getCollider2D(0))){
                 LOG("Collided!");
             }
         }

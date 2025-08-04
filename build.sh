@@ -1,1 +1,1 @@
-g++ ./src/*.cpp ./src/models/*.cpp -I./include -o ./bin/prog -lSDL2 
+g++ ./src/*.cpp -g ./src/models/*.cpp -I./include -o ./bin/prog -lSDL2 

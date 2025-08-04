@@ -29,7 +29,7 @@ public:
      */
     virtual void setRelativePosition(const Vector2 &relativePosition, const Vector2 &positionOffset);
     /**
-     * @return false if the relative position isn't set; thus ins't being used
+     * @return false if the relative position isn't set; thus isn't being used
      */
     virtual bool setPositionOffset(const Vector2 &positionOffset);
     virtual SDL_Rect createRect() const;
